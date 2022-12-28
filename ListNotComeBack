@@ -1,0 +1,19 @@
+public List<Entity> ListNotComeBack() {
+
+		List<Object[]> object = getSession().createQuery("select name ,MAX(entity.id) from Entity entity join entity.Information e  group by name").list();
+		List<HouseEntity> HouseEntities = new ArrayList<>();
+
+		for (Object[] objects : object) {
+			List<HouseEntity>  HouseList = getSession().createQuery("from HouseEntity entity where   entity.trafficType='EXIT' and entity.id=:x")
+					.setParameter("x", objects[1]).list();
+			if (!HouseList.isEmpty()){
+				for (HouseEntity entity : HouseList) {
+					HouseEntities.add(entity);
+				}
+			}
+
+		}
+
+		return HouseEntities;
+
+	}
